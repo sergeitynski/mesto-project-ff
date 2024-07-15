@@ -1,23 +1,24 @@
-const tempCard = document.querySelector('#card-template').content
+const templateCard = document.querySelector('#card-template').content
 const gallery = document.querySelector('.places__list')
 
-initialCards.forEach((item, delcard) => {
-  gallery.append(addCard(item.name, item.link, delcard));
+initialCards.forEach((item) => {
+  gallery.append(createCard(item.name, item.link));
 });
 
 
 
-function addCard(name, link){
-  const card = tempCard.cloneNode(true);
+function createCard(name, link){
+  const card = templateCard.cloneNode(true);
 
   card.querySelector('.card__title').textContent = name;
   card.querySelector('.card__image').src = link;
+  card.querySelector('.card__image').alt = 'Фото с видом на ' + name;
   const delBtn = card.querySelector('.card__delete-button');
-  delBtn.addEventListener('click', delcard);
+  delBtn.addEventListener('click', deleteCard);
 
   return card
 };
 
-function delcard(event) {
+function deleteCard(event) {
   event.target.closest('.card').remove();
 }
