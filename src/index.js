@@ -41,6 +41,7 @@ const handleEditProfile = (evt) => {
   nameTitle.textContent = nameInput.value
   jobTitle.textContent = jobInput.value
   const popup = evt.target.closest('.popup')
+  
   closeModal(popup)
 }
 
