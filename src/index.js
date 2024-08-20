@@ -1,5 +1,5 @@
 import '../pages/index.css';
-import {openPopup, openImgPopup, handleEscKeyUp, closeModal, initPopupListeners} from './components/modal'
+import {openPopup, handleEscKeyUp, closeModal, initPopupListeners} from './components/modal'
 import {initialCards} from './components/cards'
 import {createCard, deleteCard, like} from './components/card'
 
@@ -16,6 +16,8 @@ const jobTitle = document.querySelector('.profile__description');
 const gallery = document.querySelector('.places__list')
 const nameAdd = document.querySelector('.popup__input_type_card-name');
 const linkAdd = document.querySelector('.popup__input_type_url');
+const popupCaption = document.querySelector('.popup__caption')
+const photoPopup = document.querySelector('.popup__image');
 
 
 initialCards.forEach((item) => {
@@ -28,6 +30,13 @@ editBtn.addEventListener('click', () => {
   nameInput.value = nameTitle.textContent
   jobInput.value = jobTitle.textContent
 });
+
+function openImgPopup(link, name) {
+  openPopup(imgPopup);
+  photoPopup.src = link
+  photoPopup.alt = name
+  popupCaption.textContent = name
+};
 
 initPopupListeners(editPopup)
 initPopupListeners(addPopup)

@@ -1,21 +1,9 @@
-export {openPopup, openImgPopup, handleEscKeyUp, closeModal, initPopupListeners}
-
-
-const imgPopup = document.querySelector('.popup_type_image');
-const popupCaption = document.querySelector('.popup__caption')
-const photoPopup = document.querySelector('.popup__image');
+export {openPopup, handleEscKeyUp, closeModal, initPopupListeners}
 
 function openPopup(popup) {
   popup.classList.add('popup_is-animated');
   popup.classList.add('popup_is-opened');
   document.addEventListener('keydown', handleEscKeyUp)
-};
-
-function openImgPopup(link, name) {
-  openPopup(imgPopup);
-  photoPopup.src = link
-  photoPopup.alt = name
-  popupCaption.textContent = name
 };
 
 const handleEscKeyUp = (evt) => {
