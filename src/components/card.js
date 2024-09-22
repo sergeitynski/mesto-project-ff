@@ -1,22 +1,20 @@
-import { getMeProfileServer, getCardsServer, deleteCardServer, editProfileServer, addCardServer, addLikeServer, deleteLikeServer, editAvatarServer} from './api'
-import { myId } from '../index';
-export {createCard, deleteCard, like, errorResponse}
+import {deleteCardServer, addLikeServer, deleteLikeServer} from './api'
+import { myId, errorResponse } from '../index';
+export {createCard, deleteCard, like}
 
 const templateCard = document.querySelector('#card-template').content
-
-const errorResponse = (err) => {
-  console.log(err);
-}
 
 function createCard(obj, deleteCardCallBack, likeCallBack, openImgPopupCallBack){ //deleteCardCallBack, likeCallBack, openImgPopupCallBack
   const card = templateCard.querySelector('.places__item').cloneNode(true);
   const delBtn = card.querySelector('.card__delete-button');
   const likeBtn = card.querySelector('.card__like-button');
   const likeCount = card.querySelector('.card__like-count');
+  const cardsImage = card.querySelector('.card__image');
+  const cardTitle = card.querySelector('.card__title');
   
-  card.querySelector('.card__title').textContent = obj.name;
-  card.querySelector('.card__image').src = obj.link;
-  card.querySelector('.card__image').alt = 'Фото с видом на ' + obj.name;
+  cardTitle.textContent = obj.name;
+  cardsImage.src = obj.link;
+  cardsImage.alt = 'Фото с видом на ' + obj.name;
   likeCount.textContent = obj.likes.length;
 
   card.dataset.cardId = obj._id;                                
@@ -44,8 +42,6 @@ function createCard(obj, deleteCardCallBack, likeCallBack, openImgPopupCallBack)
     likeCallBack(likeBtn, likeCount);
   })
 
-  
-  const cardsImage = card.querySelector('.card__image')
   cardsImage.addEventListener('click', () => {
     openImgPopupCallBack(cardsImage.alt, cardsImage.src)
   })

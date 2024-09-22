@@ -79,14 +79,16 @@
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Обновить аватар</h3>
-          <form class="popup__form" name="new-avatar" novalidate>   
-            <input 
-              type="url" name="link_avatar" id="avatar" 
-              class="popup__input popup__input_url_avatar" 
-              placeholder="Ссылка на новый аватар" 
-              required
-              >
-            <span class="avatar-error popup__input-error"></span>
+          <form class="popup__form" name="new-avatar" novalidate>
+            <label class="label">
+              <input 
+                type="url" name="link_avatar" id="avatar" 
+                class="popup__input popup__input_url_avatar" 
+                placeholder="Ссылка на новый аватар" 
+                required
+                >   
+              <span class="avatar-error popup__input-error"></span>
+            </label> 
             <button type="submit" class="button popup__button">Сохранить</button>
           </form>
         </div>
@@ -140,8 +142,8 @@
         <button type="button" class="card__delete-button"></button>
         <div class="card__description">
           <h2 class="card__title"></h2>
-          <button type="button" class="card__like-button"></button>
-          <p class="card__like-count"></p>
+            <button type="button" class="card__like-button"></button>
+            <p class="card__like-count"></p>
         </div>
       </li>
     </template>

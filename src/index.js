@@ -1,7 +1,7 @@
 import '../pages/index.css';
-import {openPopup, handleEscKeyUp, closeModal, initPopupListeners} from './components/modal'
+import {openPopup, closeModal, initPopupListeners} from './components/modal'
 import {createCard, deleteCard, like} from './components/card'
-import { getMeProfileServer, getCardsServer, deleteCardServer, editProfileServer, addCardServer, addLikeServer, deleteLikeServer, editAvatarServer } from './components/api'
+import { getMeProfileServer, getCardsServer,editProfileServer, addCardServer, editAvatarServer } from './components/api'
 import { enableValidation, clearValidation } from './components/validation';
 
 
@@ -19,7 +19,23 @@ const nameAdd = document.querySelector('.popup__input_type_card-name');
 const linkAdd = document.querySelector('.popup__input_type_url');
 const popupCaption = document.querySelector('.popup__caption')
 const photoPopup = document.querySelector('.popup__image');
-const avatar = document.querySelector('.profile__image');
+const avatar = document.querySelector('.profile__image'); 
+const popapForm = document.forms["new-place"];
+
+const popapFormProfile = document.forms["edit-profile"];    
+const popapFormAvatar = document.forms["new-avatar"];    
+const popapContent = document.querySelector('.popup__content');
+const avatarPopup = document.querySelector('.popup_type_new-avatar');  
+const urlInputAvatar = document.querySelector('.popup__input_url_avatar');
+const config = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'button_inactive',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+}
+
 const newCard = {};
 const promises = [getMeProfileServer(), getCardsServer()]
 
@@ -33,13 +49,12 @@ function handleAddCard(evt) {
   newCard.name = nameAdd.value;
   newCard.link = linkAdd.value;
   newCard.likes = '';
-  console.log(newCard)
 
   addCardServer(newCard)
       .then((newCard) => {
           gallery.prepend(createCard(newCard, deleteCard, like, openImgPopup));
+          popapForm.reset()
           closeModal(addPopup);
-          editPopup.reset()
       })
       .catch(errorResponse)
       .finally(() => {
@@ -65,7 +80,8 @@ const handleEditProfile = (evt) => {
   jobTitle.textContent = jobInput.value;
   editProfileServer(nameTitle, jobTitle)
       .then(() => {
-          closeModal(editPopup)
+        clearValidation(editPopup, config)
+        closeModal(editPopup)
       })
       .catch(errorResponse)
       .finally(() => {
@@ -82,6 +98,7 @@ editBtn.addEventListener('click', () => {
   openPopup(editPopup)
   nameInput.value = nameTitle.textContent
   jobInput.value = jobTitle.textContent
+  clearValidation(editPopup, config)
 });
 
 
@@ -96,22 +113,15 @@ initPopupListeners(editPopup)
 initPopupListeners(addPopup)
 initPopupListeners(imgPopup)
 
-const popapFormProfile = document.forms["edit-profile"];    
-const popapFormAvatar = document.forms["new-avatar"];    
-const profileImage = document.querySelector('.profile__image');
-const avatarPopup = document.querySelector('.popup_type_new-avatar');  
-const urlInputAvatar = document.querySelector('.popup__input_url_avatar'); 
-
 function addAvatarSubmit(evt) {
   evt.preventDefault(); 
   changeButtonName(avatarPopup, 'Сохранение...')
   const newUrlAvatar = urlInputAvatar.value
-  editAvatarServer(newUrlAvatar)
+  editAvatarServer(newUrlAvatar)   
       .then((data) => {
-          avatar.setAttribute('style', `background-image: url(${data.avatar})`);
-          console.log(data)
-          closePopup(avatarPopup);
+          avatar.setAttribute('style', `background-image: url(${data.avatar})`)
           popapFormAvatar.reset()
+          closeModal(avatarPopup)
       })
       .catch(errorResponse)
       .finally(() => {
@@ -122,26 +132,24 @@ function addAvatarSubmit(evt) {
 avatar.addEventListener('click', () => {
   popapFormAvatar.reset()
   openPopup(avatarPopup);
-  clearValidation(popapFormAvatar)
+  clearValidation(popapFormAvatar, config)
 })
 
 popapFormAvatar.addEventListener('submit', (evt) => {
   evt.preventDefault();
   addAvatarSubmit(evt)
+  closeModal(avatarPopup)
 })
 
-
-enableValidation();
-
-
+enableValidation(config);
 
   Promise.all(promises)
-    .then(([MeProfileServer, CardsServer]) => {
-        nameTitle.textContent = MeProfileServer.name;   
-        jobTitle.textContent = MeProfileServer.about;
-        avatar.style.backgroundImage = `url("${MeProfileServer.avatar}")`;
-        myId = MeProfileServer._id
-        CardsServer.forEach((item) => {                        
+    .then(([meProfileServer, cardsServer]) => {
+        nameTitle.textContent = meProfileServer.name;   
+        jobTitle.textContent = meProfileServer.about;
+        avatar.style.backgroundImage = `url("${meProfileServer.avatar}")`;
+        myId = meProfileServer._id
+        cardsServer.forEach((item) => {                        
             gallery.append(createCard(item, deleteCard, like, openImgPopup))
         })
     })
@@ -149,6 +157,6 @@ enableValidation();
 
     export let myId = ''
 
-    const errorResponse = (err) => {
+    export const errorResponse = (err) => {
       console.log(err);
   }
