@@ -1,4 +1,4 @@
-import '../pages/index.css';
+import './pages/index.css';
 import {openPopup, closeModal, initPopupListeners} from './components/modal'
 import {createCard, deleteCard, like} from './components/card'
 import { getMeProfileServer, getCardsServer,editProfileServer, addCardServer, editAvatarServer } from './components/api'
@@ -21,10 +21,7 @@ const popupCaption = document.querySelector('.popup__caption')
 const photoPopup = document.querySelector('.popup__image');
 const avatar = document.querySelector('.profile__image'); 
 const popapForm = document.forms["new-place"];
-
-const popapFormProfile = document.forms["edit-profile"];    
 const popapFormAvatar = document.forms["new-avatar"];    
-const popapContent = document.querySelector('.popup__content');
 const avatarPopup = document.querySelector('.popup_type_new-avatar');  
 const urlInputAvatar = document.querySelector('.popup__input_url_avatar');
 const config = {
@@ -39,6 +36,12 @@ const config = {
 const newCard = {};
 const promises = [getMeProfileServer(), getCardsServer()]
 
+let myId = ''
+
+export const errorResponse = (err) => {
+  console.log(err);
+}
+
 function changeButtonName(popup, name) {
   popup.querySelector('.popup__button').textContent = name;
 }
@@ -52,7 +55,7 @@ function handleAddCard(evt) {
 
   addCardServer(newCard)
       .then((newCard) => {
-          gallery.prepend(createCard(newCard, deleteCard, like, openImgPopup));
+          gallery.prepend(createCard(newCard, deleteCard, like, openImgPopup, myId));
           popapForm.reset()
           closeModal(addPopup);
       })
@@ -71,15 +74,13 @@ addCardBtn.addEventListener('click', () => {
   openPopup(addPopup)
 });
 
-
-
 const handleEditProfile = (evt) => {
   evt.preventDefault(); 
   changeButtonName(editPopup, 'Сохранение...')
-  nameTitle.textContent = nameInput.value;
-  jobTitle.textContent = jobInput.value;
   editProfileServer(nameTitle, jobTitle)
       .then(() => {
+        nameTitle.textContent = nameInput.value;
+        jobTitle.textContent = jobInput.value;
         clearValidation(editPopup, config)
         closeModal(editPopup)
       })
@@ -101,7 +102,6 @@ editBtn.addEventListener('click', () => {
   clearValidation(editPopup, config)
 });
 
-
 function openImgPopup(name, link) {
   openPopup(imgPopup);
   photoPopup.src = link
@@ -112,6 +112,7 @@ function openImgPopup(name, link) {
 initPopupListeners(editPopup)
 initPopupListeners(addPopup)
 initPopupListeners(imgPopup)
+initPopupListeners(avatarPopup)
 
 function addAvatarSubmit(evt) {
   evt.preventDefault(); 
@@ -150,13 +151,7 @@ enableValidation(config);
         avatar.style.backgroundImage = `url("${meProfileServer.avatar}")`;
         myId = meProfileServer._id
         cardsServer.forEach((item) => {                        
-            gallery.append(createCard(item, deleteCard, like, openImgPopup))
+            gallery.append(createCard(item, deleteCard, like, openImgPopup, myId))
         })
     })
     .catch(errorResponse)
-
-    export let myId = ''
-
-    export const errorResponse = (err) => {
-      console.log(err);
-  }

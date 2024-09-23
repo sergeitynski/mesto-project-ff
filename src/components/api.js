@@ -12,11 +12,11 @@ const handleResponse = (res) => {
   if (res.ok) {
       return res.json();
   }
-  return Promise.reject(`Какое тебе програмирование у тебя вон: ${res.status}`)
+  return Promise.reject(`ошибка: ${res.status}`)
 }
 
 function getMeProfileServer() {
-  return fetch(`${config.baseUrl}/users/me`, {   // о пользователе
+  return fetch(`${config.baseUrl}/users/me`, { 
       headers: config.headers
   })
       .then(handleResponse)
@@ -24,7 +24,7 @@ function getMeProfileServer() {
 
 
 function getCardsServer() {
-  return fetch(`${config.baseUrl}/cards`, {  // карточки с сервера
+  return fetch(`${config.baseUrl}/cards`, { 
       headers: config.headers
   })
       .then(handleResponse)

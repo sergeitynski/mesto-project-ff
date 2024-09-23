@@ -1,10 +1,10 @@
 import {deleteCardServer, addLikeServer, deleteLikeServer} from './api'
-import { myId, errorResponse } from '../index';
+import {errorResponse } from '../index';
 export {createCard, deleteCard, like}
 
 const templateCard = document.querySelector('#card-template').content
 
-function createCard(obj, deleteCardCallBack, likeCallBack, openImgPopupCallBack){ //deleteCardCallBack, likeCallBack, openImgPopupCallBack
+function createCard(obj, deleteCardCallBack, likeCallBack, openImgPopupCallBack, myId){ //deleteCardCallBack, likeCallBack, openImgPopupCallBack
   const card = templateCard.querySelector('.places__item').cloneNode(true);
   const delBtn = card.querySelector('.card__delete-button');
   const likeBtn = card.querySelector('.card__like-button');
